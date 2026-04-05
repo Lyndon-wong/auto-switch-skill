@@ -1,0 +1,20 @@
+# Auto-Switch-Skill 运行时配置
+# MVP 版本
+
+auto_switch_skill:
+  enabled: true
+
+  evaluator:
+    method: "self_eval"
+    output_field: "thought"
+    output_format: "[TASK_TYPE: {type}]"
+
+  routing:
+    matrix_file: "routing_matrix.yaml"
+    profile_library: "model_profiles.yaml"
+    default_weight: 3
+    weight_diff_threshold: 15
+
+  switcher:
+    max_switches_per_session: 30
+    cooldown_rounds: 3

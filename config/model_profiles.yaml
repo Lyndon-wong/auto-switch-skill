@@ -1,0 +1,1386 @@
+# ============================================================
+# Auto-Switch-Skill 内置模型能力画像库
+# Model Capability Profile Library
+#
+# 📌 本文件定义了主流 LLM 在各任务类型上的默认适配权重。
+# 📌 权重范围 0-100，数值越高表示该模型越适合该类任务。
+# 📌 首次安装时，系统根据用户已注册的模型列表，
+#    模糊匹配本库中的画像，自动生成用户的 routing_matrix.yaml。
+# 📌 未匹配到画像的模型，所有任务权重默认为 3（不推荐，需用户手动配置）。
+#
+# 权重参考标准：
+#   90-100  最佳适配（该模型是此任务的首选）
+#   70-89   高度适配（很好完成，但不是最优）
+#   50-69   基本适配（可以完成，质量/效率不是最佳）
+#   30-49   勉强适配（能力边界，仅在无更优选项时使用）
+#   0-29    不推荐（基本不适合此任务）
+#
+# 任务类型说明：
+#   CHAT         日常对话、闲聊、问候、简单问答
+#   QA           知识问答、事实查询、概念解释
+#   SUMMARIZE    摘要生成、文档摘要、会议纪要
+#   TRANSLATE    多语言互译
+#   CODE_SIMPLE  函数编写、Bug修复、简单脚本
+#   CODE_COMPLEX 架构设计、大规模重构、多文件协同
+#   REASONING    逻辑推理、数学证明、因果分析
+#   ANALYSIS     长文档分析、数据解读、报告生成
+#   CREATIVE     文案创作、营销文本、方案设计
+#   MULTI_STEP   工作流编排、复合任务、多步骤规划
+#
+# 数据来源：
+#   LMSYS Chatbot Arena Elo 排名（2026.04）
+#   SWE-bench Verified（软件工程基准）
+#   AIME/GPQA Diamond（数学/科学推理基准）
+#   LiveCodeBench（编程基准，抗数据污染）
+#   WMT25 人工评估（翻译基准）
+#   各厂商官方技术报告及社区评测
+#
+# 版本：v1.1 | 2026-04-06
+# 变更：根据 benchmark_mapping.md 中的基准数据全面校准权重
+# ============================================================
+
+
+# ────────────────────────────────────────────────────────────
+# 一、Anthropic (Claude) 系列
+# Arena Coding 子榜 Elo 第一；SWE-bench 80.8%；GPQA 80-95%+
+# ────────────────────────────────────────────────────────────
+
+anthropic/claude-opus-4:
+  CHAT: 90               # Arena Overall Elo 1494，#2
+  QA: 85
+  SUMMARIZE: 88
+  TRANSLATE: 82           # WMT25 准第一梯队
+  CODE_SIMPLE: 86         # LiveCodeBench 高竞争力
+  CODE_COMPLEX: 96        # SWE-bench 80.8%，Arena Coding #1
+  REASONING: 92           # GPQA 80-95%+
+  ANALYSIS: 92
+  CREATIVE: 88
+  MULTI_STEP: 95          # 长线规划、自主编排极强
+
+anthropic/claude-sonnet-4:
+  CHAT: 82                # Arena Elo 1468，#5
+  QA: 80
+  SUMMARIZE: 85
+  TRANSLATE: 80
+  CODE_SIMPLE: 85         # LiveCodeBench 高竞争力
+  CODE_COMPLEX: 90        # SWE-bench 79.6%
+  REASONING: 85
+  ANALYSIS: 88
+  CREATIVE: 85
+  MULTI_STEP: 90
+
+anthropic/claude-haiku-3.5:
+  CHAT: 62                # 快速模型，Arena 排名中下
+  QA: 60
+  SUMMARIZE: 58
+  TRANSLATE: 58
+  CODE_SIMPLE: 58
+  CODE_COMPLEX: 32
+  REASONING: 35
+  ANALYSIS: 45
+  CREATIVE: 52
+  MULTI_STEP: 30
+
+
+# ────────────────────────────────────────────────────────────
+# 二、OpenAI (GPT) 系列
+# Arena Overall #1（GPT-5.4）；o 系列推理旗舰（AIME 96-98%）
+# ────────────────────────────────────────────────────────────
+
+openai/gpt-5.4:
+  CHAT: 95                # Arena Overall Elo 1502，#1
+  QA: 88
+  SUMMARIZE: 88
+  TRANSLATE: 88           # WMT25 准第一梯队
+  CODE_SIMPLE: 90         # LiveCodeBench 顶级
+  CODE_COMPLEX: 92        # SWE-bench ~80%
+  REASONING: 88
+  ANALYSIS: 90
+  CREATIVE: 92
+  MULTI_STEP: 92
+
+openai/gpt-4o:
+  CHAT: 72                # 上一代旗舰，Arena ~1400-1420
+  QA: 75
+  SUMMARIZE: 75
+  TRANSLATE: 78
+  CODE_SIMPLE: 78
+  CODE_COMPLEX: 80
+  REASONING: 75
+  ANALYSIS: 82
+  CREATIVE: 82
+  MULTI_STEP: 80
+
+openai/gpt-4o-mini:
+  CHAT: 62                # Arena ~1380，轻量模型
+  QA: 58
+  SUMMARIZE: 55
+  TRANSLATE: 60
+  CODE_SIMPLE: 58
+  CODE_COMPLEX: 35
+  REASONING: 35
+  ANALYSIS: 42
+  CREATIVE: 52
+  MULTI_STEP: 32
+
+openai/o3:
+  CHAT: 42                # 推理专精，日常对话体验一般
+  QA: 72
+  SUMMARIZE: 55
+  TRANSLATE: 48
+  CODE_SIMPLE: 75
+  CODE_COMPLEX: 88
+  REASONING: 98           # AIME 96-98%，GPQA 83-88%，推理旗舰
+  ANALYSIS: 85
+  CREATIVE: 42
+  MULTI_STEP: 85
+
+openai/o3-mini:
+  CHAT: 38
+  QA: 58
+  SUMMARIZE: 48
+  TRANSLATE: 42
+  CODE_SIMPLE: 62
+  CODE_COMPLEX: 70
+  REASONING: 90           # 推理依然很强
+  ANALYSIS: 68
+  CREATIVE: 35
+  MULTI_STEP: 65
+
+openai/o1:
+  CHAT: 38
+  QA: 62
+  SUMMARIZE: 52
+  TRANSLATE: 44
+  CODE_SIMPLE: 68
+  CODE_COMPLEX: 78
+  REASONING: 92           # 上一代推理旗舰
+  ANALYSIS: 78
+  CREATIVE: 38
+  MULTI_STEP: 75
+
+openai/gpt-3.5-turbo:
+  CHAT: 35                # 老旧模型，Arena ~1150-1200
+  QA: 38
+  SUMMARIZE: 35
+  TRANSLATE: 42
+  CODE_SIMPLE: 35
+  CODE_COMPLEX: 12
+  REASONING: 15
+  ANALYSIS: 20
+  CREATIVE: 32
+  MULTI_STEP: 10
+
+
+# ────────────────────────────────────────────────────────────
+# 三、Google (Gemini) 系列
+# 超长上下文（1M+）；AIME/GPQA ~90%+；SWE-bench 80.6%
+# Gemini 2.5 Pro 为 WMT25 翻译第一梯队
+# ────────────────────────────────────────────────────────────
+
+google/gemini-3.1-pro:
+  CHAT: 88                # Arena Elo 1476，#4
+  QA: 85
+  SUMMARIZE: 90           # 超长上下文 + Arena Long Context 子榜强
+  TRANSLATE: 85
+  CODE_SIMPLE: 88         # LiveCodeBench 顶级
+  CODE_COMPLEX: 94        # SWE-bench 80.6%，#3
+  REASONING: 92           # AIME ~90%+，GPQA ~90%+
+  ANALYSIS: 95            # 1M+ 上下文分析王者
+  CREATIVE: 82
+  MULTI_STEP: 90
+
+google/gemini-3.1-flash:
+  CHAT: 75                # Arena Elo 1412，#10
+  QA: 68
+  SUMMARIZE: 72           # 长上下文优势保留
+  TRANSLATE: 70
+  CODE_SIMPLE: 68
+  CODE_COMPLEX: 48
+  REASONING: 52
+  ANALYSIS: 68
+  CREATIVE: 60
+  MULTI_STEP: 42
+
+google/gemini-2.5-pro:
+  CHAT: 78
+  QA: 80
+  SUMMARIZE: 85
+  TRANSLATE: 90           # WMT25 第一梯队
+  CODE_SIMPLE: 80
+  CODE_COMPLEX: 82
+  REASONING: 85
+  ANALYSIS: 90            # 长上下文分析强
+  CREATIVE: 78
+  MULTI_STEP: 82
+
+google/gemini-2.5-flash:
+  CHAT: 68
+  QA: 62
+  SUMMARIZE: 62
+  TRANSLATE: 68
+  CODE_SIMPLE: 62
+  CODE_COMPLEX: 40
+  REASONING: 45
+  ANALYSIS: 58
+  CREATIVE: 52
+  MULTI_STEP: 35
+
+google/gemini-2.0-flash:
+  CHAT: 62
+  QA: 58
+  SUMMARIZE: 58
+  TRANSLATE: 62
+  CODE_SIMPLE: 55
+  CODE_COMPLEX: 32
+  REASONING: 38
+  ANALYSIS: 50
+  CREATIVE: 48
+  MULTI_STEP: 28
+
+
+# ────────────────────────────────────────────────────────────
+# 四、DeepSeek 系列
+# R1 推理强但低于 o3（AIME 79-91%，GPQA 71-81%）
+# V3.2 LiveCodeBench 顶级；SWE-bench 73.0%
+# ────────────────────────────────────────────────────────────
+
+deepseek/deepseek-r1:
+  CHAT: 32                # 推理专精，日常对话体验差
+  QA: 62
+  SUMMARIZE: 58
+  TRANSLATE: 48
+  CODE_SIMPLE: 65
+  CODE_COMPLEX: 78
+  REASONING: 90           # AIME 79-91%，GPQA 71-81%；低于 o3 的 96-98%
+  ANALYSIS: 78
+  CREATIVE: 38
+  MULTI_STEP: 75
+
+deepseek/deepseek-v3:
+  CHAT: 72
+  QA: 75
+  SUMMARIZE: 72
+  TRANSLATE: 75           # WMT25 高竞争力开源
+  CODE_SIMPLE: 78
+  CODE_COMPLEX: 72
+  REASONING: 72
+  ANALYSIS: 75
+  CREATIVE: 68
+  MULTI_STEP: 70
+
+deepseek/deepseek-v3.2:
+  CHAT: 80                # Arena Elo 1451，#6
+  QA: 80
+  SUMMARIZE: 78
+  TRANSLATE: 78
+  CODE_SIMPLE: 88         # LiveCodeBench 顶级
+  CODE_COMPLEX: 78        # SWE-bench 73.0%
+  REASONING: 78
+  ANALYSIS: 80
+  CREATIVE: 72
+  MULTI_STEP: 78
+
+deepseek/deepseek-v2.5:
+  CHAT: 58
+  QA: 60
+  SUMMARIZE: 58
+  TRANSLATE: 58
+  CODE_SIMPLE: 62
+  CODE_COMPLEX: 50
+  REASONING: 52
+  ANALYSIS: 55
+  CREATIVE: 50
+  MULTI_STEP: 45
+
+deepseek/deepseek-r1-distill-7b:
+  CHAT: 28
+  QA: 35
+  SUMMARIZE: 30
+  TRANSLATE: 28
+  CODE_SIMPLE: 35
+  CODE_COMPLEX: 15
+  REASONING: 52           # 蒸馏推理能力仍可观
+  ANALYSIS: 30
+  CREATIVE: 22
+  MULTI_STEP: 18
+
+
+# ────────────────────────────────────────────────────────────
+# 五、Alibaba (Qwen/通义千问) 系列
+# Qwen3-Max Arena Elo 1445（#7）；WMT25 高竞争力
+# ────────────────────────────────────────────────────────────
+
+alibaba/qwen-3.5-72b:
+  CHAT: 80                # ≈Qwen3-Max，Arena Elo 1445，#7
+  QA: 82
+  SUMMARIZE: 80
+  TRANSLATE: 82
+  CODE_SIMPLE: 78         # LiveCodeBench 中等
+  CODE_COMPLEX: 72
+  REASONING: 72
+  ANALYSIS: 78
+  CREATIVE: 75
+  MULTI_STEP: 68
+
+alibaba/qwen-2.5-72b:
+  CHAT: 68
+  QA: 75
+  SUMMARIZE: 72
+  TRANSLATE: 78           # WMT25 高竞争力
+  CODE_SIMPLE: 72
+  CODE_COMPLEX: 60        # SWE-bench ~55%
+  REASONING: 60
+  ANALYSIS: 68
+  CREATIVE: 65
+  MULTI_STEP: 55
+
+alibaba/qwen-2.5-32b:
+  CHAT: 58
+  QA: 65
+  SUMMARIZE: 62
+  TRANSLATE: 68
+  CODE_SIMPLE: 65
+  CODE_COMPLEX: 45
+  REASONING: 42
+  ANALYSIS: 52
+  CREATIVE: 55
+  MULTI_STEP: 38
+
+alibaba/qwen-2.5-14b:
+  CHAT: 50
+  QA: 55
+  SUMMARIZE: 50
+  TRANSLATE: 58
+  CODE_SIMPLE: 55
+  CODE_COMPLEX: 30
+  REASONING: 28
+  ANALYSIS: 38
+  CREATIVE: 45
+  MULTI_STEP: 25
+
+alibaba/qwen-2.5-7b:
+  CHAT: 35                # Arena ~1200，排名靠后
+  QA: 42
+  SUMMARIZE: 35
+  TRANSLATE: 45
+  CODE_SIMPLE: 40
+  CODE_COMPLEX: 15        # SWE-bench ~15%
+  REASONING: 15
+  ANALYSIS: 22
+  CREATIVE: 32
+  MULTI_STEP: 10
+
+alibaba/qwen-2.5-3b:
+  CHAT: 25
+  QA: 28
+  SUMMARIZE: 22
+  TRANSLATE: 30
+  CODE_SIMPLE: 25
+  CODE_COMPLEX: 5
+  REASONING: 5
+  ANALYSIS: 10
+  CREATIVE: 20
+  MULTI_STEP: 3
+
+alibaba/qwen-coder-2.5-32b:
+  CHAT: 35
+  QA: 42
+  SUMMARIZE: 32
+  TRANSLATE: 28
+  CODE_SIMPLE: 85          # 代码专精模型
+  CODE_COMPLEX: 72
+  REASONING: 50
+  ANALYSIS: 42
+  CREATIVE: 25
+  MULTI_STEP: 45
+
+alibaba/qwen-coder-2.5-7b:
+  CHAT: 20
+  QA: 25
+  SUMMARIZE: 18
+  TRANSLATE: 15
+  CODE_SIMPLE: 62          # 小型代码专精
+  CODE_COMPLEX: 35
+  REASONING: 28
+  ANALYSIS: 22
+  CREATIVE: 12
+  MULTI_STEP: 18
+
+
+# ────────────────────────────────────────────────────────────
+# 六、Zhipu AI (智谱/GLM) 系列
+# GLM-5.1 SWE-bench 77.8%；LiveCodeBench 高竞争力
+# ────────────────────────────────────────────────────────────
+
+zhipu/glm-5.1:
+  CHAT: 72
+  QA: 75
+  SUMMARIZE: 75
+  TRANSLATE: 72
+  CODE_SIMPLE: 78          # LiveCodeBench 高竞争力
+  CODE_COMPLEX: 82         # SWE-bench 77.8%
+  REASONING: 75
+  ANALYSIS: 78
+  CREATIVE: 70
+  MULTI_STEP: 80
+
+zhipu/glm-5:
+  CHAT: 68
+  QA: 72
+  SUMMARIZE: 70
+  TRANSLATE: 68
+  CODE_SIMPLE: 72
+  CODE_COMPLEX: 68
+  REASONING: 65
+  ANALYSIS: 70
+  CREATIVE: 65
+  MULTI_STEP: 68
+
+zhipu/glm-4-plus:
+  CHAT: 62
+  QA: 65
+  SUMMARIZE: 62
+  TRANSLATE: 65
+  CODE_SIMPLE: 62
+  CODE_COMPLEX: 48
+  REASONING: 48
+  ANALYSIS: 55
+  CREATIVE: 58
+  MULTI_STEP: 45
+
+zhipu/glm-4:
+  CHAT: 58
+  QA: 60
+  SUMMARIZE: 58
+  TRANSLATE: 60
+  CODE_SIMPLE: 55
+  CODE_COMPLEX: 40
+  REASONING: 40
+  ANALYSIS: 48
+  CREATIVE: 52
+  MULTI_STEP: 38
+
+zhipu/glm-4-flash:
+  CHAT: 52
+  QA: 48
+  SUMMARIZE: 45
+  TRANSLATE: 50
+  CODE_SIMPLE: 42
+  CODE_COMPLEX: 22
+  REASONING: 25
+  ANALYSIS: 32
+  CREATIVE: 42
+  MULTI_STEP: 20
+
+zhipu/glm-4-air:
+  CHAT: 55
+  QA: 52
+  SUMMARIZE: 50
+  TRANSLATE: 55
+  CODE_SIMPLE: 48
+  CODE_COMPLEX: 28
+  REASONING: 30
+  ANALYSIS: 38
+  CREATIVE: 45
+  MULTI_STEP: 25
+
+
+# ────────────────────────────────────────────────────────────
+# 七、MiniMax 系列
+# M2.5 SWE-bench 80.2%（#4）；m2.7 预计更强
+# ────────────────────────────────────────────────────────────
+
+minimax/minimax-m2.5:
+  CHAT: 70                  # Arena Elo ~1440，对话能力良好
+  QA: 70
+  SUMMARIZE: 75
+  TRANSLATE: 65
+  CODE_SIMPLE: 80           # LiveCodeBench 高竞争力
+  CODE_COMPLEX: 82          # SWE-bench 80.2%，#4
+  REASONING: 70             # 推理非专长，但 MoE 架构效率高
+  ANALYSIS: 72
+  CREATIVE: 70
+  MULTI_STEP: 78
+
+minimax/minimax-m2.1:
+  CHAT: 65                  # M2.5 前代，整体低 5-8 分
+  QA: 65
+  SUMMARIZE: 70
+  TRANSLATE: 62
+  CODE_SIMPLE: 72
+  CODE_COMPLEX: 72
+  REASONING: 62
+  ANALYSIS: 65
+  CREATIVE: 65
+  MULTI_STEP: 70
+
+minimax/m2.7:
+  CHAT: 72
+  QA: 72
+  SUMMARIZE: 78
+  TRANSLATE: 68
+  CODE_SIMPLE: 82           # LiveCodeBench 高竞争力
+  CODE_COMPLEX: 85          # M2.5 SWE-bench 80.2%，m2.7 更新版本
+  REASONING: 72
+  ANALYSIS: 75
+  CREATIVE: 72
+  MULTI_STEP: 80
+
+minimax/abab-7:
+  CHAT: 62
+  QA: 58
+  SUMMARIZE: 60
+  TRANSLATE: 55
+  CODE_SIMPLE: 55
+  CODE_COMPLEX: 42
+  REASONING: 42
+  ANALYSIS: 50
+  CREATIVE: 65              # 创意/文案有传统优势
+  MULTI_STEP: 42
+
+minimax/abab-6.5s:
+  CHAT: 55
+  QA: 48
+  SUMMARIZE: 48
+  TRANSLATE: 48
+  CODE_SIMPLE: 42
+  CODE_COMPLEX: 28
+  REASONING: 28
+  ANALYSIS: 38
+  CREATIVE: 52
+  MULTI_STEP: 25
+
+
+# ────────────────────────────────────────────────────────────
+# 八、xAI (Grok) 系列
+# 对话流畅；STEM 推理强
+# ────────────────────────────────────────────────────────────
+
+xai/grok-4:
+  CHAT: 78
+  QA: 80
+  SUMMARIZE: 75
+  TRANSLATE: 72
+  CODE_SIMPLE: 80
+  CODE_COMPLEX: 82
+  REASONING: 85
+  ANALYSIS: 82
+  CREATIVE: 78
+  MULTI_STEP: 82
+
+xai/grok-3:
+  CHAT: 72
+  QA: 72
+  SUMMARIZE: 68
+  TRANSLATE: 65
+  CODE_SIMPLE: 70
+  CODE_COMPLEX: 68
+  REASONING: 75
+  ANALYSIS: 70
+  CREATIVE: 68
+  MULTI_STEP: 65
+
+xai/grok-3-mini:
+  CHAT: 58
+  QA: 55
+  SUMMARIZE: 48
+  TRANSLATE: 48
+  CODE_SIMPLE: 52
+  CODE_COMPLEX: 38
+  REASONING: 52
+  ANALYSIS: 45
+  CREATIVE: 48
+  MULTI_STEP: 35
+
+xai/grok-2:
+  CHAT: 60
+  QA: 58
+  SUMMARIZE: 55
+  TRANSLATE: 52
+  CODE_SIMPLE: 55
+  CODE_COMPLEX: 45
+  REASONING: 55
+  ANALYSIS: 52
+  CREATIVE: 55
+  MULTI_STEP: 42
+
+
+# ────────────────────────────────────────────────────────────
+# 九、Xiaomi (小米/MiMo) 系列
+# 无公开 Benchmark；基于同规模模型估算
+# ────────────────────────────────────────────────────────────
+
+xiaomi/mimo-v2-pro:
+  CHAT: 55
+  QA: 52
+  SUMMARIZE: 48
+  TRANSLATE: 48
+  CODE_SIMPLE: 48
+  CODE_COMPLEX: 35
+  REASONING: 38
+  ANALYSIS: 42
+  CREATIVE: 48
+  MULTI_STEP: 45
+
+xiaomi/mimo-v2:
+  CHAT: 48
+  QA: 45
+  SUMMARIZE: 42
+  TRANSLATE: 42
+  CODE_SIMPLE: 42
+  CODE_COMPLEX: 28
+  REASONING: 30
+  ANALYSIS: 35
+  CREATIVE: 40
+  MULTI_STEP: 35
+
+xiaomi/mimo-v1:
+  CHAT: 40
+  QA: 38
+  SUMMARIZE: 35
+  TRANSLATE: 35
+  CODE_SIMPLE: 32
+  CODE_COMPLEX: 18
+  REASONING: 20
+  ANALYSIS: 25
+  CREATIVE: 32
+  MULTI_STEP: 22
+
+
+# ────────────────────────────────────────────────────────────
+# 十、Meta (Llama) 系列
+# Llama 4 (81B) Arena Elo 1428（#9）；WMT25 高竞争力
+# ────────────────────────────────────────────────────────────
+
+meta/llama-4-405b:
+  CHAT: 78                # 81B 是 Arena #9，405B 更强
+  QA: 78
+  SUMMARIZE: 75
+  TRANSLATE: 78           # WMT25 高竞争力
+  CODE_SIMPLE: 75
+  CODE_COMPLEX: 72
+  REASONING: 70
+  ANALYSIS: 75
+  CREATIVE: 70
+  MULTI_STEP: 68
+
+meta/llama-4-70b:
+  CHAT: 72
+  QA: 72
+  SUMMARIZE: 68
+  TRANSLATE: 72
+  CODE_SIMPLE: 70         # LiveCodeBench 中等
+  CODE_COMPLEX: 58
+  REASONING: 55
+  ANALYSIS: 62
+  CREATIVE: 62
+  MULTI_STEP: 50
+
+meta/llama-4-8b:
+  CHAT: 38
+  QA: 40
+  SUMMARIZE: 32
+  TRANSLATE: 38
+  CODE_SIMPLE: 35
+  CODE_COMPLEX: 15
+  REASONING: 15
+  ANALYSIS: 22
+  CREATIVE: 30
+  MULTI_STEP: 10
+
+meta/llama-3.1-70b:
+  CHAT: 62
+  QA: 65
+  SUMMARIZE: 62
+  TRANSLATE: 65
+  CODE_SIMPLE: 62
+  CODE_COMPLEX: 50
+  REASONING: 48
+  ANALYSIS: 55
+  CREATIVE: 55
+  MULTI_STEP: 42
+
+meta/llama-3.1-8b:
+  CHAT: 32
+  QA: 35
+  SUMMARIZE: 28
+  TRANSLATE: 35
+  CODE_SIMPLE: 30
+  CODE_COMPLEX: 12
+  REASONING: 12
+  ANALYSIS: 18
+  CREATIVE: 25
+  MULTI_STEP: 8
+
+
+# ────────────────────────────────────────────────────────────
+# 十一、Mistral 系列
+# 多语言翻译传统强项；Codestral 代码专精
+# ────────────────────────────────────────────────────────────
+
+mistral/mistral-large:
+  CHAT: 68
+  QA: 72
+  SUMMARIZE: 72
+  TRANSLATE: 82           # 多语言翻译传统强项
+  CODE_SIMPLE: 75
+  CODE_COMPLEX: 70
+  REASONING: 68
+  ANALYSIS: 72
+  CREATIVE: 65
+  MULTI_STEP: 62
+
+mistral/mistral-medium:
+  CHAT: 58
+  QA: 60
+  SUMMARIZE: 58
+  TRANSLATE: 70
+  CODE_SIMPLE: 60
+  CODE_COMPLEX: 48
+  REASONING: 45
+  ANALYSIS: 52
+  CREATIVE: 52
+  MULTI_STEP: 40
+
+mistral/mistral-small:
+  CHAT: 48
+  QA: 48
+  SUMMARIZE: 45
+  TRANSLATE: 58
+  CODE_SIMPLE: 45
+  CODE_COMPLEX: 25
+  REASONING: 28
+  ANALYSIS: 32
+  CREATIVE: 38
+  MULTI_STEP: 22
+
+mistral/codestral:
+  CHAT: 28
+  QA: 35
+  SUMMARIZE: 28
+  TRANSLATE: 22
+  CODE_SIMPLE: 82          # 代码专精模型
+  CODE_COMPLEX: 75
+  REASONING: 48
+  ANALYSIS: 35
+  CREATIVE: 20
+  MULTI_STEP: 40
+
+mistral/mixtral-8x22b:
+  CHAT: 58
+  QA: 62
+  SUMMARIZE: 58
+  TRANSLATE: 68
+  CODE_SIMPLE: 62
+  CODE_COMPLEX: 50
+  REASONING: 48
+  ANALYSIS: 55
+  CREATIVE: 52
+  MULTI_STEP: 42
+
+
+# ────────────────────────────────────────────────────────────
+# 十二、Baichuan (百川) 系列
+# 无公开 Benchmark；中文对话/创作优秀
+# ────────────────────────────────────────────────────────────
+
+baichuan/baichuan-4:
+  CHAT: 62
+  QA: 58
+  SUMMARIZE: 58
+  TRANSLATE: 58
+  CODE_SIMPLE: 50
+  CODE_COMPLEX: 35
+  REASONING: 35
+  ANALYSIS: 45
+  CREATIVE: 62
+  MULTI_STEP: 32
+
+baichuan/baichuan-3-turbo:
+  CHAT: 52
+  QA: 48
+  SUMMARIZE: 48
+  TRANSLATE: 48
+  CODE_SIMPLE: 40
+  CODE_COMPLEX: 22
+  REASONING: 25
+  ANALYSIS: 35
+  CREATIVE: 52
+  MULTI_STEP: 22
+
+
+# ────────────────────────────────────────────────────────────
+# 十三、Moonshot (月之暗面/Kimi) 系列
+# Kimi K2.5 SWE-bench 76.8%；超长上下文处理强
+# ────────────────────────────────────────────────────────────
+
+moonshot/kimi-k2:
+  CHAT: 72
+  QA: 72
+  SUMMARIZE: 82           # 长文档摘要强项
+  TRANSLATE: 68
+  CODE_SIMPLE: 72
+  CODE_COMPLEX: 78        # SWE-bench 76.8%（Kimi K2.5 数据）
+  REASONING: 68
+  ANALYSIS: 88            # 超长上下文分析能力突出
+  CREATIVE: 68
+  MULTI_STEP: 68
+
+moonshot/kimi-k1.5:
+  CHAT: 62
+  QA: 65
+  SUMMARIZE: 75
+  TRANSLATE: 62
+  CODE_SIMPLE: 62
+  CODE_COMPLEX: 52
+  REASONING: 55
+  ANALYSIS: 78
+  CREATIVE: 60
+  MULTI_STEP: 50
+
+moonshot/moonshot-v1-128k:
+  CHAT: 55
+  QA: 55
+  SUMMARIZE: 70           # 128K 上下文摘要优势
+  TRANSLATE: 52
+  CODE_SIMPLE: 50
+  CODE_COMPLEX: 38
+  REASONING: 40
+  ANALYSIS: 72            # 长上下文分析优势
+  CREATIVE: 52
+  MULTI_STEP: 38
+
+
+# ────────────────────────────────────────────────────────────
+# 十四、01.AI (零一万物/Yi) 系列
+# 无突出 Benchmark 数据；中英双语均衡
+# ────────────────────────────────────────────────────────────
+
+01ai/yi-lightning:
+  CHAT: 60
+  QA: 60
+  SUMMARIZE: 58
+  TRANSLATE: 60
+  CODE_SIMPLE: 58
+  CODE_COMPLEX: 48
+  REASONING: 48
+  ANALYSIS: 52
+  CREATIVE: 55
+  MULTI_STEP: 42
+
+01ai/yi-large:
+  CHAT: 55
+  QA: 55
+  SUMMARIZE: 52
+  TRANSLATE: 55
+  CODE_SIMPLE: 52
+  CODE_COMPLEX: 40
+  REASONING: 40
+  ANALYSIS: 48
+  CREATIVE: 48
+  MULTI_STEP: 35
+
+01ai/yi-medium:
+  CHAT: 48
+  QA: 48
+  SUMMARIZE: 45
+  TRANSLATE: 48
+  CODE_SIMPLE: 42
+  CODE_COMPLEX: 28
+  REASONING: 28
+  ANALYSIS: 35
+  CREATIVE: 40
+  MULTI_STEP: 22
+
+01ai/yi-1.5-34b:
+  CHAT: 52
+  QA: 52
+  SUMMARIZE: 48
+  TRANSLATE: 52
+  CODE_SIMPLE: 48
+  CODE_COMPLEX: 35
+  REASONING: 35
+  ANALYSIS: 42
+  CREATIVE: 45
+  MULTI_STEP: 30
+
+01ai/yi-1.5-9b:
+  CHAT: 35
+  QA: 38
+  SUMMARIZE: 32
+  TRANSLATE: 38
+  CODE_SIMPLE: 32
+  CODE_COMPLEX: 15
+  REASONING: 15
+  ANALYSIS: 22
+  CREATIVE: 28
+  MULTI_STEP: 12
+
+
+# ────────────────────────────────────────────────────────────
+# 十五、ByteDance (字节/豆包/Doubao) 系列
+# 无公开 Benchmark；长上下文版本有分析优势
+# ────────────────────────────────────────────────────────────
+
+bytedance/doubao-pro-256k:
+  CHAT: 68
+  QA: 65
+  SUMMARIZE: 72           # 256K 上下文摘要优势
+  TRANSLATE: 65
+  CODE_SIMPLE: 58
+  CODE_COMPLEX: 42
+  REASONING: 45
+  ANALYSIS: 70            # 长上下文分析优势
+  CREATIVE: 62
+  MULTI_STEP: 42
+
+bytedance/doubao-pro-32k:
+  CHAT: 65
+  QA: 62
+  SUMMARIZE: 62
+  TRANSLATE: 62
+  CODE_SIMPLE: 55
+  CODE_COMPLEX: 38
+  REASONING: 40
+  ANALYSIS: 52
+  CREATIVE: 58
+  MULTI_STEP: 38
+
+bytedance/doubao-lite-32k:
+  CHAT: 52
+  QA: 45
+  SUMMARIZE: 42
+  TRANSLATE: 48
+  CODE_SIMPLE: 38
+  CODE_COMPLEX: 18
+  REASONING: 20
+  ANALYSIS: 30
+  CREATIVE: 42
+  MULTI_STEP: 18
+
+
+# ────────────────────────────────────────────────────────────
+# 十六、Baidu (百度/文心) 系列
+# 搜索增强问答；无突出 Benchmark 数据
+# ────────────────────────────────────────────────────────────
+
+baidu/ernie-4.5:
+  CHAT: 68
+  QA: 72                  # 搜索增强的问答能力
+  SUMMARIZE: 68
+  TRANSLATE: 65
+  CODE_SIMPLE: 58
+  CODE_COMPLEX: 42
+  REASONING: 45
+  ANALYSIS: 60
+  CREATIVE: 65
+  MULTI_STEP: 42
+
+baidu/ernie-4.0-turbo:
+  CHAT: 62
+  QA: 65
+  SUMMARIZE: 60
+  TRANSLATE: 60
+  CODE_SIMPLE: 52
+  CODE_COMPLEX: 35
+  REASONING: 38
+  ANALYSIS: 50
+  CREATIVE: 55
+  MULTI_STEP: 32
+
+baidu/ernie-3.5:
+  CHAT: 50
+  QA: 52
+  SUMMARIZE: 45
+  TRANSLATE: 48
+  CODE_SIMPLE: 38
+  CODE_COMPLEX: 20
+  REASONING: 22
+  ANALYSIS: 32
+  CREATIVE: 42
+  MULTI_STEP: 18
+
+
+# ────────────────────────────────────────────────────────────
+# 十七、iFlytek (讯飞/星火) 系列
+# 无公开 Benchmark；中文语音+文字理解
+# ────────────────────────────────────────────────────────────
+
+iflytek/spark-4.0-ultra:
+  CHAT: 62
+  QA: 60
+  SUMMARIZE: 55
+  TRANSLATE: 55
+  CODE_SIMPLE: 50
+  CODE_COMPLEX: 35
+  REASONING: 38
+  ANALYSIS: 48
+  CREATIVE: 55
+  MULTI_STEP: 32
+
+iflytek/spark-3.5:
+  CHAT: 50
+  QA: 48
+  SUMMARIZE: 42
+  TRANSLATE: 45
+  CODE_SIMPLE: 38
+  CODE_COMPLEX: 20
+  REASONING: 22
+  ANALYSIS: 32
+  CREATIVE: 42
+  MULTI_STEP: 18
+
+
+# ────────────────────────────────────────────────────────────
+# 十八、SenseTime (商汤/日日新) 系列
+# 无公开 Benchmark；多模态视觉强
+# ────────────────────────────────────────────────────────────
+
+sensetime/sensenova-5.5:
+  CHAT: 60
+  QA: 58
+  SUMMARIZE: 55
+  TRANSLATE: 52
+  CODE_SIMPLE: 52
+  CODE_COMPLEX: 38
+  REASONING: 40
+  ANALYSIS: 50
+  CREATIVE: 52
+  MULTI_STEP: 35
+
+sensetime/sensenova-5.0:
+  CHAT: 52
+  QA: 48
+  SUMMARIZE: 45
+  TRANSLATE: 45
+  CODE_SIMPLE: 42
+  CODE_COMPLEX: 28
+  REASONING: 30
+  ANALYSIS: 38
+  CREATIVE: 42
+  MULTI_STEP: 25
+
+
+# ────────────────────────────────────────────────────────────
+# 十九、Cohere 系列
+# 企业级 RAG 和文档处理
+# ────────────────────────────────────────────────────────────
+
+cohere/command-r-plus:
+  CHAT: 65
+  QA: 75                  # RAG 场景问答强
+  SUMMARIZE: 78
+  TRANSLATE: 72
+  CODE_SIMPLE: 58
+  CODE_COMPLEX: 45
+  REASONING: 48
+  ANALYSIS: 75            # 文档处理能力强
+  CREATIVE: 55
+  MULTI_STEP: 48
+
+cohere/command-r:
+  CHAT: 58
+  QA: 65
+  SUMMARIZE: 65
+  TRANSLATE: 62
+  CODE_SIMPLE: 48
+  CODE_COMPLEX: 32
+  REASONING: 35
+  ANALYSIS: 62
+  CREATIVE: 45
+  MULTI_STEP: 35
+
+
+# ────────────────────────────────────────────────────────────
+# 二十、Stepfun (阶跃星辰) 系列
+# 无突出 Benchmark 数据；多模态/中文对话
+# ────────────────────────────────────────────────────────────
+
+stepfun/step-2:
+  CHAT: 62
+  QA: 60
+  SUMMARIZE: 58
+  TRANSLATE: 58
+  CODE_SIMPLE: 55
+  CODE_COMPLEX: 45
+  REASONING: 45
+  ANALYSIS: 52
+  CREATIVE: 58
+  MULTI_STEP: 42
+
+stepfun/step-1.5v:
+  CHAT: 52
+  QA: 50
+  SUMMARIZE: 48
+  TRANSLATE: 48
+  CODE_SIMPLE: 42
+  CODE_COMPLEX: 30
+  REASONING: 30
+  ANALYSIS: 40
+  CREATIVE: 45
+  MULTI_STEP: 30
+
+
+# ────────────────────────────────────────────────────────────
+# 二十一、Amazon (Bedrock/Nova) 系列
+# 企业级集成；AWS 生态
+# ────────────────────────────────────────────────────────────
+
+amazon/nova-pro:
+  CHAT: 62
+  QA: 60
+  SUMMARIZE: 62
+  TRANSLATE: 60
+  CODE_SIMPLE: 58
+  CODE_COMPLEX: 45
+  REASONING: 45
+  ANALYSIS: 58
+  CREATIVE: 52
+  MULTI_STEP: 45
+
+amazon/nova-lite:
+  CHAT: 52
+  QA: 45
+  SUMMARIZE: 42
+  TRANSLATE: 48
+  CODE_SIMPLE: 40
+  CODE_COMPLEX: 22
+  REASONING: 25
+  ANALYSIS: 32
+  CREATIVE: 38
+  MULTI_STEP: 22
+
+
+# ────────────────────────────────────────────────────────────
+# 二十二、Hunyuan (腾讯混元) 系列
+# 无突出 Benchmark 数据；中文对话/腾讯生态
+# ────────────────────────────────────────────────────────────
+
+tencent/hunyuan-turbo:
+  CHAT: 62
+  QA: 58
+  SUMMARIZE: 58
+  TRANSLATE: 58
+  CODE_SIMPLE: 52
+  CODE_COMPLEX: 38
+  REASONING: 40
+  ANALYSIS: 48
+  CREATIVE: 58
+  MULTI_STEP: 38
+
+tencent/hunyuan-pro:
+  CHAT: 55
+  QA: 52
+  SUMMARIZE: 50
+  TRANSLATE: 52
+  CODE_SIMPLE: 45
+  CODE_COMPLEX: 30
+  REASONING: 32
+  ANALYSIS: 40
+  CREATIVE: 50
+  MULTI_STEP: 30
+
+tencent/hunyuan-lite:
+  CHAT: 42
+  QA: 38
+  SUMMARIZE: 32
+  TRANSLATE: 38
+  CODE_SIMPLE: 30
+  CODE_COMPLEX: 12
+  REASONING: 15
+  ANALYSIS: 22
+  CREATIVE: 32
+  MULTI_STEP: 12
+
+
+# ────────────────────────────────────────────────────────────
+# 二十三、Intern (书生) 系列 — 上海AI实验室
+# 开源；工具使用能力好
+# ────────────────────────────────────────────────────────────
+
+internlm/internlm3-20b:
+  CHAT: 55
+  QA: 55
+  SUMMARIZE: 50
+  TRANSLATE: 50
+  CODE_SIMPLE: 55
+  CODE_COMPLEX: 38
+  REASONING: 40
+  ANALYSIS: 45
+  CREATIVE: 42
+  MULTI_STEP: 38
+
+internlm/internlm2.5-7b:
+  CHAT: 35
+  QA: 38
+  SUMMARIZE: 30
+  TRANSLATE: 32
+  CODE_SIMPLE: 35
+  CODE_COMPLEX: 15
+  REASONING: 18
+  ANALYSIS: 22
+  CREATIVE: 25
+  MULTI_STEP: 15
+
+
+# ────────────────────────────────────────────────────────────
+# 补充画像：用户实际注册但原画像库未收录的模型
+# 基于公开 benchmark 数据和同系列模型推算
+# ────────────────────────────────────────────────────────────
+
+# --- DeepSeek 补充 ---
+
+deepseek/deepseek-chat:
+  CHAT: 75                  # DeepSeek V3 系列通用对话版本
+  QA: 75
+  SUMMARIZE: 72
+  TRANSLATE: 72
+  CODE_SIMPLE: 78
+  CODE_COMPLEX: 68
+  REASONING: 68
+  ANALYSIS: 72
+  CREATIVE: 65
+  MULTI_STEP: 65
+
+deepseek/deepseek-v4-lite:
+  CHAT: 72                  # V4 轻量版，~200B 参数，非官方发布
+  QA: 72                    # 基于社区泄露数据估算，接近 V3.2 水平
+  SUMMARIZE: 70
+  TRANSLATE: 70
+  CODE_SIMPLE: 78
+  CODE_COMPLEX: 70
+  REASONING: 70
+  ANALYSIS: 72
+  CREATIVE: 65
+  MULTI_STEP: 68
+
+deepseek/deepseek-v4-lite-thinking:
+  CHAT: 48                  # V4 Lite 推理增强版，思考模式
+  QA: 68
+  SUMMARIZE: 58
+  TRANSLATE: 52
+  CODE_SIMPLE: 72
+  CODE_COMPLEX: 80
+  REASONING: 88             # 推理增强版，预计接近 R1 水平
+  ANALYSIS: 78
+  CREATIVE: 42
+  MULTI_STEP: 78
+
+deepseek/deepseek-v4-sc-thinking:
+  CHAT: 45                  # V4 SC (Self-Consistency) Thinking
+  QA: 65
+  SUMMARIZE: 55
+  TRANSLATE: 50
+  CODE_SIMPLE: 70
+  CODE_COMPLEX: 78
+  REASONING: 90             # 自一致性推理，比标准 thinking 略强
+  ANALYSIS: 75
+  CREATIVE: 38
+  MULTI_STEP: 80
+
+# --- Alibaba/Qwen 补充 ---
+
+alibaba/qwen3coder:
+  CHAT: 42                  # 代码专精模型，对话体验一般
+  QA: 48
+  SUMMARIZE: 38
+  TRANSLATE: 32
+  CODE_SIMPLE: 85           # SWE-bench ~70%+（含 scaffold）
+  CODE_COMPLEX: 80          # 3B 活跃参数/80B MoE，代码能力突出
+  REASONING: 55
+  ANALYSIS: 45
+  CREATIVE: 28
+  MULTI_STEP: 52
+
+alibaba/qwen3vl:
+  CHAT: 68                  # 视觉语言模型，多模态能力
+  QA: 72                    # 图文问答场景强
+  SUMMARIZE: 65
+  TRANSLATE: 60
+  CODE_SIMPLE: 55           # 代码非专长
+  CODE_COMPLEX: 40
+  REASONING: 50
+  ANALYSIS: 75              # 图表/文档分析有视觉优势
+  CREATIVE: 62
+  MULTI_STEP: 45
+
+alibaba/qwen3-next-80b:
+  CHAT: 72                  # Qwen3 Next 系列 80B
+  QA: 75
+  SUMMARIZE: 72
+  TRANSLATE: 75
+  CODE_SIMPLE: 72
+  CODE_COMPLEX: 62
+  REASONING: 62
+  ANALYSIS: 70
+  CREATIVE: 68
+  MULTI_STEP: 58
+
+# --- OpenAI 补充 ---
+
+openai/gpt-oss-120b:
+  CHAT: 65                  # GPT 开源版 120B，社区开放
+  QA: 68
+  SUMMARIZE: 65
+  TRANSLATE: 68
+  CODE_SIMPLE: 65
+  CODE_COMPLEX: 55
+  REASONING: 55
+  ANALYSIS: 62
+  CREATIVE: 60
+  MULTI_STEP: 52
+
+
+# ────────────────────────────────────────────────────────────
+# 二十五、其他/通用画像
+# 未匹配到任何已知模型家族时的默认画像
+# ────────────────────────────────────────────────────────────
+
+
+_default:
+  CHAT: 3
+  QA: 3
+  SUMMARIZE: 3
+  TRANSLATE: 3
+  CODE_SIMPLE: 3
+  CODE_COMPLEX: 3
+  REASONING: 3
+  ANALYSIS: 3
+  CREATIVE: 3
+  MULTI_STEP: 3
+
+
+# ============================================================
+# 模糊匹配规则说明
+#
+# 系统通过以下步骤将用户注册的模型 ID 匹配到画像：
+#
+# 1. 标准化模型 ID
+#    "Qwen/Qwen2.5-7B-Instruct" → 提取厂商 "qwen" + 模型标记 "2.5-7b"
+#
+# 2. 匹配画像键名
+#    按优先级尝试从精确到模糊：
+#    a) 完全匹配: "alibaba/qwen-2.5-7b"
+#    b) 家族+规模匹配: "qwen" + "7b" → "alibaba/qwen-2.5-7b"
+#    c) 家族+最近规模: "qwen" + "10b" → 最接近的 "alibaba/qwen-2.5-14b"
+#    d) 仅家族匹配: "qwen" → 取该家族中等规模的画像
+#    e) 全部未匹配 → 使用 "_default"
+#
+# 3. 厂商别名映射
+#    以下别名等价：
+#    - qwen / tongyi / 通义 → alibaba
+#    - chatglm / glm / chatglm → zhipu
+#    - ernie / wenxin / 文心 → baidu
+#    - spark / 星火 → iflytek
+#    - doubao / 豆包 → bytedance
+#    - kimi → moonshot
+#    - yi → 01ai
+#    - grok → xai
+#    - mimo → xiaomi
+#    - command → cohere
+#    - nova → amazon
+#    - hunyuan / 混元 → tencent
+#    - internlm / 书生 → internlm
+#    - sensenova / 日日新 → sensetime
+# ============================================================
