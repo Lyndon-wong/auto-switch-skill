@@ -35,5 +35,10 @@ htmlcov/
 .pytest_cache/
 .mypy_cache/
 
+# AI 工具配置
+.claude/
+.codex
+.gemini/
+
 # 导出配置
 config/export_*.yaml
